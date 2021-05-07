@@ -4,14 +4,28 @@ using System.Text;
 using System;
 using System.IO;
 using UnityEngine;
+using System.Threading;
 using Looxid.Link;
 
 public class writeRange : MonoBehaviour
 {
+
+    public float DataSeconds = 5;
     bool keepWriting = true;
     string filePath = "C:\\temp";
     string delimiter = ",";
     StringBuilder line = new StringBuilder();
+
+    List<EEGFeatureIndex> featureIndexList;
+
+    void Update()
+    {
+        // Returns EEG feature index data from last 3 seconds
+         featureIndexList = LooxidLinkData.Instance.GetEEGFeatureIndexData(1.0f);
+    }
+
+
+
 
     /*
      *
@@ -52,6 +66,16 @@ public class writeRange : MonoBehaviour
         //LooxidLinkManager.Instance.SetDisplayDisconnectedMessage(displayLinkMessage);
         //LooxidLinkManager.Instance.SetDisplayNoiseSignalMessage(displayLinkMessage);
         //LooxidLinkManager.Instance.SetDisplaySensorOffMessage(displayLinkMessage);
+
+
+        // after 30minutes, create a new set of CSVs:
+        var autoEvent = new AutoResetEvent(false);
+
+        var timer = new Timer(
+            buildCSVs,
+            null,
+            TimeSpan.FromMinutes(5),
+            TimeSpan.FromMinutes(5));
     }
 
     /*
@@ -66,18 +90,71 @@ public class writeRange : MonoBehaviour
      *  How do we get the sensors? Do we get em 
      */
 
-
     /*
+     *     public enum EEGSensorID
+            {
+                AF3 = 0,
+                AF4 = 1,
+                Fp1 = 2,
+                Fp2 = 3,
+                AF7 = 4,
+                AF8 = 5
+            }
+     * 
+     * 
+     * 
+     */
+
     private void OnEnable()
     {
         LooxidLinkData.OnReceiveEEGFeatureIndexes += OnReceiveEEGFeatureIndexes;
     }
-    
-    void OnReceiveEEGFeatureIndexes(EEGFeatureIndex featureIndex)
+
+    // write a coroutine to call this every 3 seconds
+    List<EEGFeatureIndex> featureIndexList2 = LooxidLinkData.Instance.GetEEGFeatureIndexData(3.0f);
+
+
+    public void buildCSVs(System.Object stateInfo)
     {
-        Debug.Log("AF3_Alpha: " + featureIndex.Alpha(EEGSensorID.AF3));
+        AutoResetEvent autoEvent = (AutoResetEvent)stateInfo;
     }
-    */
+
+
+
+
+
+
+
+
+
+
+
+
+
+    class CSVBuilder
+    {
+        int invokeCount;
+        public void buildCSVs(System.Object stateInfo)
+        {
+            AutoResetEvent autoEvent = (AutoResetEvent)stateInfo;
+        }
+        // take featureIndexData and make one csv for every range
+        void OnReceiveEEGFeatureIndexes(EEGFeatureIndex featureIndexData)
+        {
+            // make one line for every second
+            //CSV line:
+            line.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndexData.Delta(EEGSensorID.AF3),
+                                featureIndexData.Delta(EEGSensorID.AF4), featureIndexData.Delta(EEGSensorID.AF7),
+                                featureIndexData.Delta(EEGSensorID.AF8), featureIndexData.Delta(EEGSensorID.Fp1),
+                                featureIndexData.Delta(EEGSensorID.Fp2)
+                                );
+
+
+
+        }
+    }
+
+    
 
 
 
