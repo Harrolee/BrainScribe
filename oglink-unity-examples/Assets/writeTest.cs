@@ -1,25 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
-using System.Threading.Tasks;
 using System;
 using System.IO;
 using UnityEngine;
-using System.Threading;
 using Looxid.Link;
 
 public class writeTest : MonoBehaviour
 {
-    public float SecondsToCapture = 150;
-    public float CSVTime = 10; // 300 secs is 5mins
+    public float SecondsToCapture = 900;
+    public float CSVTime = 300; // 300 secs is 5mins
     public float BrainIncrements = 5; //secs
+    public string baseFileName = "";
 
     string filePath = "C:\\temp";
-
     float incrementCounter = 0;
-
-    string baseFileName = "Delta";
-
     
     List<EEGFeatureIndex> featureIndexList2;
     EEGSensorID[] sensorIDs = new EEGSensorID[] {
@@ -43,7 +39,9 @@ public class writeTest : MonoBehaviour
     IEnumerator buildCSV(string fileTag)
     {
         StringBuilder newRow;
-        string fileName = baseFileName + fileTag;
+        CultureInfo cultureUS = new CultureInfo("en-US");
+        DateTime nowDateTime = DateTime.Now.ToLocalTime();
+        string fileName = baseFileName + nowDateTime.ToString() + fileTag;
         string header = buildHeader();
         StreamWriter outputFile = writeHeader(filePath, fileName, header);
         
