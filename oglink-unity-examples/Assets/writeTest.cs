@@ -42,8 +42,7 @@ public class writeTest : MonoBehaviour
 
     IEnumerator buildCSV(string fileTag)
     {
-        StringBuilder newLine;
-        //build header
+        StringBuilder newRow;
         string fileName = baseFileName + fileTag;
         string header = buildHeader();
         StreamWriter outputFile = writeHeader(filePath, fileName, header);
@@ -53,8 +52,8 @@ public class writeTest : MonoBehaviour
             yield return new WaitForSecondsRealtime(BrainIncrements);
             incrementCounter += BrainIncrements;
             
-            newLine = addScanSet();
-            outputFile.Write(newLine);
+            newRow = buildRow();
+            outputFile.Write(newRow);
             print(incrementCounter);
             print(CSVTime);
         }
@@ -67,6 +66,51 @@ public class writeTest : MonoBehaviour
         if (fileTag != Convert.ToString(SecondsToCapture/incrementCounter)){
             cycle(fileTag);
         }
+    }
+
+    StringBuilder buildRow()
+    {
+        StringBuilder row = new StringBuilder();
+        featureIndexList2 = LooxidLinkData.Instance.GetEEGFeatureIndexData(BrainIncrements);
+        // every object in 
+        foreach (EEGFeatureIndex featureIndex in featureIndexList2)
+        {
+            //Alpha
+            row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndex.Alpha(EEGSensorID.AF3),
+                    featureIndex.Alpha(EEGSensorID.AF4), featureIndex.Alpha(EEGSensorID.AF7),
+                    featureIndex.Alpha(EEGSensorID.AF8), featureIndex.Alpha(EEGSensorID.Fp1),
+                    featureIndex.Alpha(EEGSensorID.Fp2)
+                    );
+
+            //Beta
+            row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndex.Beta(EEGSensorID.AF3),
+                    featureIndex.Beta(EEGSensorID.AF4), featureIndex.Beta(EEGSensorID.AF7),
+                    featureIndex.Beta(EEGSensorID.AF8), featureIndex.Beta(EEGSensorID.Fp1),
+                    featureIndex.Beta(EEGSensorID.Fp2)
+                    );
+
+            // Delta
+            row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndex.Delta(EEGSensorID.AF3),
+                    featureIndex.Delta(EEGSensorID.AF4), featureIndex.Delta(EEGSensorID.AF7),
+                    featureIndex.Delta(EEGSensorID.AF8), featureIndex.Delta(EEGSensorID.Fp1),
+                    featureIndex.Delta(EEGSensorID.Fp2)
+                    );
+
+            //Gamma
+            row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndex.Gamma(EEGSensorID.AF3),
+                    featureIndex.Gamma(EEGSensorID.AF4), featureIndex.Gamma(EEGSensorID.AF7),
+                    featureIndex.Gamma(EEGSensorID.AF8), featureIndex.Gamma(EEGSensorID.Fp1),
+                    featureIndex.Gamma(EEGSensorID.Fp2)
+                    );
+
+            //Theta
+            row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndex.Theta(EEGSensorID.AF3),
+                    featureIndex.Theta(EEGSensorID.AF4), featureIndex.Theta(EEGSensorID.AF7),
+                    featureIndex.Theta(EEGSensorID.AF8), featureIndex.Theta(EEGSensorID.Fp1),
+                    featureIndex.Theta(EEGSensorID.Fp2)
+                    );
+        }
+        return row;
     }
 
     /* Header:
@@ -82,58 +126,6 @@ public class writeTest : MonoBehaviour
             header.AppendFormat("{0}:AF3, {0}:AF4, {0}:AF7, {0}:AF8, {0}:Fp1, {0}:Fp2", range);
         }
         return header.ToString();
-    }
-
-    StringBuilder addScanSet()
-    {
-        StringBuilder row = new StringBuilder();
-        featureIndexList2 = LooxidLinkData.Instance.GetEEGFeatureIndexData(BrainIncrements);
-        // every object in 
-        /*
-        foreach (EEGFeatureIndex featureIndex in featureIndexList2)
-        {
-
-        }*/
-        for (int i = 0; i < featureIndexList2.Count; i++)
-        {
-            //Alpha
-            row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndexList2[i].Alpha(EEGSensorID.AF3),
-                    featureIndexList2[i].Alpha(EEGSensorID.AF4), featureIndexList2[i].Alpha(EEGSensorID.AF7),
-                    featureIndexList2[i].Alpha(EEGSensorID.AF8), featureIndexList2[i].Alpha(EEGSensorID.Fp1),
-                    featureIndexList2[i].Alpha(EEGSensorID.Fp2)
-                    );
-
-            //Beta
-            row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndexList2[i].Beta(EEGSensorID.AF3),
-                    featureIndexList2[i].Beta(EEGSensorID.AF4), featureIndexList2[i].Beta(EEGSensorID.AF7),
-                    featureIndexList2[i].Beta(EEGSensorID.AF8), featureIndexList2[i].Beta(EEGSensorID.Fp1),
-                    featureIndexList2[i].Beta(EEGSensorID.Fp2)
-                    );
-
-            // Delta
-            row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndexList2[i].Delta(EEGSensorID.AF3),
-                                featureIndexList2[i].Delta(EEGSensorID.AF4), featureIndexList2[i].Delta(EEGSensorID.AF7),
-                                featureIndexList2[i].Delta(EEGSensorID.AF8), featureIndexList2[i].Delta(EEGSensorID.Fp1),
-                                featureIndexList2[i].Delta(EEGSensorID.Fp2)
-                                );
-            // append this row to the Delta csv
-
-            //Gamma
-            row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndexList2[i].Gamma(EEGSensorID.AF3),
-                    featureIndexList2[i].Gamma(EEGSensorID.AF4), featureIndexList2[i].Gamma(EEGSensorID.AF7),
-                    featureIndexList2[i].Gamma(EEGSensorID.AF8), featureIndexList2[i].Gamma(EEGSensorID.Fp1),
-                    featureIndexList2[i].Gamma(EEGSensorID.Fp2)
-                    );
-
-            //Theta
-            row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndexList2[i].Theta(EEGSensorID.AF3),
-                    featureIndexList2[i].Theta(EEGSensorID.AF4), featureIndexList2[i].Theta(EEGSensorID.AF7),
-                    featureIndexList2[i].Theta(EEGSensorID.AF8), featureIndexList2[i].Theta(EEGSensorID.Fp1),
-                    featureIndexList2[i].Theta(EEGSensorID.Fp2)
-                    );
-
-        }
-        return row;
     }
 
     // create a file, write a header to it, return the StreamWriter object
