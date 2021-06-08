@@ -42,6 +42,19 @@ public class writeTest : MonoBehaviour
         StartCoroutine(buildCSV(fileTag));
     }
 
+    string buildHeader()
+    {
+        string[] ranges = { "Alpha", "Beta", "Delta", "Gamma" };
+        StringBuilder header = new StringBuilder();
+        for range in ranges {
+            header.AppendFormat(":{0},{1},{2},{3},{4},{5}", );
+        }
+        
+        
+
+        return header;
+    }
+
     IEnumerator buildCSV(string fileTag)
     {
         StringBuilder newLine;
@@ -75,6 +88,8 @@ public class writeTest : MonoBehaviour
         featureIndexList2 = LooxidLinkData.Instance.GetEEGFeatureIndexData(BrainIncrements);
         for (int i = 0; i < featureIndexList2.Count; i++)
         {
+
+            // Delta
             // one foreach loop like this for all of the ranges
             // add each of these to a string
             line.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndexList2[i].Delta(EEGSensorID.AF3),
@@ -83,6 +98,14 @@ public class writeTest : MonoBehaviour
                                 featureIndexList2[i].Delta(EEGSensorID.Fp2)
                                 );
             // append this line to the Delta csv
+
+            //Alpha
+            line.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndexList2[i].Alpha(EEGSensorID.AF3),
+                    featureIndexList2[i].Alpha(EEGSensorID.AF4), featureIndexList2[i].Alpha(EEGSensorID.AF7),
+                    featureIndexList2[i].Alpha(EEGSensorID.AF8), featureIndexList2[i].Alpha(EEGSensorID.Fp1),
+                    featureIndexList2[i].Alpha(EEGSensorID.Fp2)
+                    );
+
         }
         return line;
     }
