@@ -7,15 +7,17 @@ using System.IO;
 using UnityEngine;
 using Looxid.Link;
 
-public class writeTest : MonoBehaviour
+public class writeToCSV : MonoBehaviour
 {
     public float SecondsToCapture = 900;
-    public float CSVTime = 300; // 300 secs is 5mins
+    public float CSVTime = 10; // 300 secs is 5mins
     public float BrainIncrements = 5; //secs
+
+    // Do not prepend slashes to the baseFileName
     public string baseFileName = "";
 
     string filePath = "C:\\temp";
-    float incrementCounter = 0;
+    
     
     List<EEGFeatureIndex> featureIndexList2;
     EEGSensorID[] sensorIDs = new EEGSensorID[] {
@@ -41,10 +43,13 @@ public class writeTest : MonoBehaviour
         StringBuilder newRow;
         CultureInfo cultureUS = new CultureInfo("en-US");
         DateTime nowDateTime = DateTime.Now.ToLocalTime();
-        string fileName = baseFileName + nowDateTime.ToString() + fileTag;
+        string formattedNowString = nowDateTime.ToString().Replace('/','_').Replace(':','-');
+        print(formattedNowString);
+        string fileName = baseFileName + formattedNowString + fileTag + ".csv";
         string header = buildHeader();
         StreamWriter outputFile = writeHeader(filePath, fileName, header);
-        
+        float incrementCounter = 0;
+
         while (incrementCounter < CSVTime) // create a new row every x seconds with x seconds of data
         {
             yield return new WaitForSecondsRealtime(BrainIncrements);
@@ -107,6 +112,9 @@ public class writeTest : MonoBehaviour
                     featureIndex.Theta(EEGSensorID.AF8), featureIndex.Theta(EEGSensorID.Fp1),
                     featureIndex.Theta(EEGSensorID.Fp2)
                     );
+
+            // add a new line
+            row.Append("\n");
         }
         return row;
     }
@@ -121,8 +129,11 @@ public class writeTest : MonoBehaviour
         StringBuilder header = new StringBuilder();
         foreach (string range in ranges)
         {
-            header.AppendFormat("{0}:AF3, {0}:AF4, {0}:AF7, {0}:AF8, {0}:Fp1, {0}:Fp2", range);
+            header.AppendFormat("{0}:AF3,{0}:AF4,{0}:AF7,{0}:AF8,{0}:Fp1,{0}:Fp2,", range);
         }
+        // chop the last character from the header. ie: ","
+        header.Remove(header.Length - 1, 1);
+        header.Append("\n");
         return header.ToString();
     }
 

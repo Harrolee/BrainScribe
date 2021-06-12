@@ -232,10 +232,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b8734d600659144aaa130b20fe627ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  csvIncrements: 5
-  DataSeconds: 5
-  CSVTime: 300
+  SecondsToCapture: 900
+  CSVTime: 10
   BrainIncrements: 5
+  baseFileName: 
 --- !u!4 &702788580
 Transform:
   m_ObjectHideFlags: 0
