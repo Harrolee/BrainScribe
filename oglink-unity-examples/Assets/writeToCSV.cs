@@ -10,8 +10,8 @@ using Looxid.Link;
 public class writeToCSV : MonoBehaviour
 {
     public float SecondsToCapture = 900;
-    public float CSVTime = 10; // 300 secs is 5mins
-    public float BrainIncrements = 5; //secs
+    public float CSVTime = 240; // 300 secs is 5mins
+    public float BrainIncrements = .5; //secs
 
     // Do not prepend slashes to the baseFileName
     public string baseFileName = "";
@@ -78,6 +78,21 @@ public class writeToCSV : MonoBehaviour
         // every object in 
         foreach (EEGFeatureIndex featureIndex in featureIndexList2)
         {
+
+            // Delta
+            row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndex.Delta(EEGSensorID.AF3),
+                    featureIndex.Delta(EEGSensorID.AF4), featureIndex.Delta(EEGSensorID.AF7),
+                    featureIndex.Delta(EEGSensorID.AF8), featureIndex.Delta(EEGSensorID.Fp1),
+                    featureIndex.Delta(EEGSensorID.Fp2)
+                    );
+
+            //Theta
+            row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndex.Theta(EEGSensorID.AF3),
+                    featureIndex.Theta(EEGSensorID.AF4), featureIndex.Theta(EEGSensorID.AF7),
+                    featureIndex.Theta(EEGSensorID.AF8), featureIndex.Theta(EEGSensorID.Fp1),
+                    featureIndex.Theta(EEGSensorID.Fp2)
+                    );
+
             //Alpha
             row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndex.Alpha(EEGSensorID.AF3),
                     featureIndex.Alpha(EEGSensorID.AF4), featureIndex.Alpha(EEGSensorID.AF7),
@@ -92,25 +107,11 @@ public class writeToCSV : MonoBehaviour
                     featureIndex.Beta(EEGSensorID.Fp2)
                     );
 
-            // Delta
-            row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndex.Delta(EEGSensorID.AF3),
-                    featureIndex.Delta(EEGSensorID.AF4), featureIndex.Delta(EEGSensorID.AF7),
-                    featureIndex.Delta(EEGSensorID.AF8), featureIndex.Delta(EEGSensorID.Fp1),
-                    featureIndex.Delta(EEGSensorID.Fp2)
-                    );
-
             //Gamma
             row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndex.Gamma(EEGSensorID.AF3),
                     featureIndex.Gamma(EEGSensorID.AF4), featureIndex.Gamma(EEGSensorID.AF7),
                     featureIndex.Gamma(EEGSensorID.AF8), featureIndex.Gamma(EEGSensorID.Fp1),
                     featureIndex.Gamma(EEGSensorID.Fp2)
-                    );
-
-            //Theta
-            row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndex.Theta(EEGSensorID.AF3),
-                    featureIndex.Theta(EEGSensorID.AF4), featureIndex.Theta(EEGSensorID.AF7),
-                    featureIndex.Theta(EEGSensorID.AF8), featureIndex.Theta(EEGSensorID.Fp1),
-                    featureIndex.Theta(EEGSensorID.Fp2)
                     );
 
             // add a new line
@@ -125,7 +126,7 @@ public class writeToCSV : MonoBehaviour
      */
     string buildHeader()
     {
-        string[] ranges = { "Alpha", "Beta", "Delta", "Gamma" };
+        string[] ranges = { "Delta", "Theta", "Alpha", "Beta", "Gamma" };
         StringBuilder header = new StringBuilder();
         foreach (string range in ranges)
         {
