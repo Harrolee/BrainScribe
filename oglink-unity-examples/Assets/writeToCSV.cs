@@ -11,7 +11,7 @@ public class writeToCSV : MonoBehaviour
 {
     public float SecondsToCapture = 900;
     public float CSVTime = 240; // 300 secs is 5mins
-    public float BrainIncrements = .5; //secs
+    public float BrainIncrements = .5f; //secs
 
     // Do not prepend slashes to the baseFileName
     public string baseFileName = "";
