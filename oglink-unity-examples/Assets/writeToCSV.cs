@@ -80,28 +80,28 @@ public class writeToCSV : MonoBehaviour
         {
 
             // Delta
-            row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndex.Delta(EEGSensorID.AF3),
+            row.AppendFormat("{0},{1},{2},{3},{4},{5},", featureIndex.Delta(EEGSensorID.AF3),
                     featureIndex.Delta(EEGSensorID.AF4), featureIndex.Delta(EEGSensorID.AF7),
                     featureIndex.Delta(EEGSensorID.AF8), featureIndex.Delta(EEGSensorID.Fp1),
                     featureIndex.Delta(EEGSensorID.Fp2)
                     );
 
             //Theta
-            row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndex.Theta(EEGSensorID.AF3),
+            row.AppendFormat("{0},{1},{2},{3},{4},{5},", featureIndex.Theta(EEGSensorID.AF3),
                     featureIndex.Theta(EEGSensorID.AF4), featureIndex.Theta(EEGSensorID.AF7),
                     featureIndex.Theta(EEGSensorID.AF8), featureIndex.Theta(EEGSensorID.Fp1),
                     featureIndex.Theta(EEGSensorID.Fp2)
                     );
 
             //Alpha
-            row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndex.Alpha(EEGSensorID.AF3),
+            row.AppendFormat("{0},{1},{2},{3},{4},{5},", featureIndex.Alpha(EEGSensorID.AF3),
                     featureIndex.Alpha(EEGSensorID.AF4), featureIndex.Alpha(EEGSensorID.AF7),
                     featureIndex.Alpha(EEGSensorID.AF8), featureIndex.Alpha(EEGSensorID.Fp1),
                     featureIndex.Alpha(EEGSensorID.Fp2)
                     );
 
             //Beta
-            row.AppendFormat("{0},{1},{2},{3},{4},{5}", featureIndex.Beta(EEGSensorID.AF3),
+            row.AppendFormat("{0},{1},{2},{3},{4},{5},", featureIndex.Beta(EEGSensorID.AF3),
                     featureIndex.Beta(EEGSensorID.AF4), featureIndex.Beta(EEGSensorID.AF7),
                     featureIndex.Beta(EEGSensorID.AF8), featureIndex.Beta(EEGSensorID.Fp1),
                     featureIndex.Beta(EEGSensorID.Fp2)
